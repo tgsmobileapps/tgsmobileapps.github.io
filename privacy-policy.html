@@ -5,15 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Privacy Policy - TGS Mobile Apps</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
-        h1 { color: #1a1a1a; border-bottom: 2px solid #007AFF; padding-bottom: 10px; }
-        h2 { color: #007AFF; margin-top: 30px; }
-        h3 { color: #555; margin-top: 20px; }
-        .app-section { background: #f8f9fe; border-radius: 12px; padding: 20px; margin: 15px 0; border-left: 4px solid #007AFF; }
-        .app-section.meditrack { border-left-color: #34C759; }
-        .disclaimer { background: #FFF3CD; border: 1px solid #FFEAA7; border-radius: 8px; padding: 15px; margin: 20px 0; }
-        .contact { background: #E8F4FD; border-radius: 8px; padding: 15px; margin-top: 20px; }
-        a { color: #007AFF; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        h1 { color: #1a1a1a; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        h2 { color: #2c2c2c; margin-top: 30px; }
+        h3 { color: #444; }
+        strong { color: #1a1a1a; }
+        a { color: #0066cc; }
         ul { padding-left: 20px; }
         li { margin-bottom: 5px; }
     </style>
@@ -21,47 +25,59 @@
 <body>
 
 <h1>Privacy Policy</h1>
-<p><strong>Last updated:</strong> March 29, 2026</p>
+
+<p><strong>Last updated:</strong> April 20, 2026</p>
+
 <p>TGS Mobile Apps ("we", "us", or "our") develops and publishes mobile applications. This Privacy Policy explains how we collect, use, and protect your information when you use any of our applications.</p>
+
 <p>This policy covers the following applications:</p>
 <ul>
     <li><strong>Authenticator App - MFA / 2FA</strong> (two-factor authentication manager)</li>
     <li><strong>MediTrack - AI Child Care Pal</strong> (child health and medication tracker)</li>
+    <li><strong>ObjectRelay</strong> (AI-powered visual memory and inventory assistant)</li>
 </ul>
 
 <h2>1. Information We Collect</h2>
 
-<div class="app-section">
-    <h3>Authenticator App - MFA / 2FA</h3>
-    <ul>
-        <li><strong>2FA Account Data:</strong> All secrets, usernames, and service names are stored locally on your device only. We do not collect or store this data on any server.</li>
-        <li><strong>Camera:</strong> Used solely to scan QR codes for adding 2FA accounts. Camera data is not stored, transmitted, or shared.</li>
-        <li><strong>Biometric Data:</strong> Face ID / Touch ID is processed entirely by your device's secure enclave. We never access or store biometric data.</li>
-    </ul>
-</div>
+<h3>Authenticator App - MFA / 2FA</h3>
+<ul>
+    <li><strong>2FA Account Data:</strong> All secrets, usernames, and service names are stored locally on your device only. We do not collect or store this data on any server.</li>
+    <li><strong>Camera:</strong> Used solely to scan QR codes for adding 2FA accounts. Camera data is not stored, transmitted, or shared.</li>
+    <li><strong>Biometric Data:</strong> Face ID / Touch ID is processed entirely by your device's secure enclave. We never access or store biometric data.</li>
+</ul>
 
-<div class="app-section meditrack">
-    <h3>MediTrack - AI Child Care Pal</h3>
-    <ul>
-        <li><strong>Child Profile Information:</strong> Your child's name, date of birth, weight, and gender are stored locally on your device using SharedPreferences. This data is not transmitted to our servers.</li>
-        <li><strong>Health Data:</strong> Temperature records, medicine information, dose history, and supplement tracking are stored locally on your device.</li>
-        <li><strong>Camera and Photos:</strong> The app uses your camera to photograph medicine packaging for AI-powered identification. These photos are stored locally on your device and sent to Google's Gemini AI service for analysis. Photos are not stored on our servers.</li>
-        <li><strong>AI Processing:</strong> Medicine names and photos are sent to Google Gemini API for analysis. Google's privacy policy governs how this data is processed. We do not store or share this data beyond the AI request.</li>
-    </ul>
-</div>
+<h3>MediTrack - AI Child Care Pal</h3>
+<ul>
+    <li><strong>Child Profile Information:</strong> Your child's name, date of birth, weight, and gender are stored locally on your device using SharedPreferences. This data is not transmitted to our servers.</li>
+    <li><strong>Health Data:</strong> Temperature records, medicine information, dose history, and supplement tracking are stored locally on your device.</li>
+    <li><strong>Camera and Photos:</strong> The app uses your camera to photograph medicine packaging for AI-powered identification. These photos are stored locally on your device and sent to Google's Gemini AI service for analysis. Photos are not stored on our servers.</li>
+    <li><strong>AI Processing:</strong> Medicine names and photos are sent to Google Gemini API for analysis. Google's privacy policy governs how this data is processed. We do not store or share this data beyond the AI request.</li>
+</ul>
+
+<h3>ObjectRelay</h3>
+<ul>
+    <li><strong>Photos and Images:</strong> The app uses your camera or photo gallery to capture images of drawers, boxes, shelves, and storage spaces. These photos are stored locally on your device.</li>
+    <li><strong>AI Object Recognition:</strong> Photos are sent to Google's Gemini AI service for object identification and analysis. The AI identifies objects in the image and returns a structured list of detected items. Photos are processed in real-time and are not stored on our servers or Google's servers beyond the duration of the API request.</li>
+    <li><strong>Inventory Data:</strong> Object names, descriptions, categories, and location tags are stored locally on your device using a local database (Hive). This data is not transmitted to any server.</li>
+    <li><strong>Location Tags:</strong> Location names (e.g., "Kitchen Drawer", "Garage Shelf") are user-defined labels stored locally. The app does not collect GPS or physical location data.</li>
+    <li><strong>Search Queries:</strong> All search queries are processed locally on your device against the local database. No search data is transmitted externally.</li>
+</ul>
 
 <h2>2. Analytics</h2>
-<p>Both applications use <strong>Firebase Analytics</strong> (by Google) to collect anonymous usage statistics, including:</p>
+
+<p>Our applications use <strong>Firebase Analytics</strong> (by Google) to collect anonymous usage statistics, including:</p>
 <ul>
     <li>App opens and session duration</li>
     <li>Feature usage patterns</li>
     <li>Device type and operating system version</li>
     <li>Crash reports and performance diagnostics</li>
 </ul>
+
 <p>This data is anonymous and does not include personally identifiable information. It helps us improve app performance and user experience.</p>
 
 <h2>3. In-App Purchases and Subscriptions</h2>
-<p>Both applications offer premium features through in-app subscriptions. Purchases are processed entirely through Apple App Store or Google Play Store. We use <strong>Adapty</strong> as our subscription management platform.</p>
+
+<p>Our applications offer premium features through in-app subscriptions. Purchases are processed entirely through Apple App Store or Google Play Store. We use <strong>Adapty</strong> as our subscription management platform.</p>
 <ul>
     <li>We do not collect or store payment information (credit card numbers, billing addresses, etc.).</li>
     <li>Adapty receives anonymized purchase and subscription data for analytics purposes.</li>
@@ -70,56 +86,68 @@
 
 <h2>4. Data Storage and Security</h2>
 <ul>
-    <li>All personal data (child profiles, health records, 2FA secrets) is stored <strong>locally on your device</strong>.</li>
+    <li>All personal data (child profiles, health records, 2FA secrets, inventory data, photos) is stored <strong>locally on your device</strong>.</li>
     <li>We do not operate any servers that store your personal data.</li>
     <li>All network communications use HTTPS encryption.</li>
+    <li>Photos sent to the AI service for analysis are transmitted via encrypted connections and are not retained after processing.</li>
     <li>We recommend enabling device passcode and biometric lock for additional security.</li>
 </ul>
 
 <h2>5. Data Sharing</h2>
+
 <p>We do not sell, trade, or share your personal information with third parties. Data is only transmitted in the following cases:</p>
 <ul>
-    <li><strong>Google Gemini AI:</strong> Medicine photos and names are sent for AI analysis (MediTrack only).</li>
+    <li><strong>Google Gemini AI:</strong> Photos are sent for AI analysis (MediTrack and ObjectRelay). Object names and descriptions generated by the AI are stored locally on your device only.</li>
     <li><strong>Firebase Analytics:</strong> Anonymous usage statistics are sent to Google.</li>
     <li><strong>Adapty:</strong> Anonymized subscription data for purchase management.</li>
 </ul>
 
 <h2>6. Data Deletion</h2>
+
 <p>You can delete all your data at any time:</p>
 <ul>
     <li><strong>Authenticator App:</strong> Delete individual accounts or uninstall the app to remove all data.</li>
     <li><strong>MediTrack:</strong> Go to Settings (gear icon) → "Reset All Data" to permanently delete all profiles, medicines, temperature records, and dose history. Alternatively, uninstall the app.</li>
+    <li><strong>ObjectRelay:</strong> Delete individual locations and their associated scans from within the app, or uninstall the app to remove all data including photos and inventory records.</li>
 </ul>
+
 <p>Since all data is stored locally on your device, uninstalling the app permanently removes all associated data.</p>
 
 <h2>7. Children's Privacy</h2>
+
 <p>MediTrack is designed for <strong>parents and caregivers</strong> to track their children's health information. The app is not intended to be used by children directly. We do not knowingly collect information from children under 13.</p>
-<p>The Authenticator App is not directed to children under 13.</p>
+
+<p>The Authenticator App and ObjectRelay are not directed to children under 13.</p>
 
 <h2>8. Medical Disclaimer</h2>
-<div class="disclaimer">
-    <strong>Important:</strong> MediTrack provides general health information powered by AI for reference purposes only. It is <strong>not a substitute for professional medical advice, diagnosis, or treatment</strong>. Always consult your doctor or qualified healthcare provider before making any medical decisions. Always read the medicine package leaflet before use. The AI-generated information may contain inaccuracies.
-</div>
 
-<h2>9. Third-Party Services</h2>
+<p><strong>Important:</strong> MediTrack provides general health information powered by AI for reference purposes only. It is <strong>not a substitute for professional medical advice, diagnosis, or treatment</strong>. Always consult your doctor or qualified healthcare provider before making any medical decisions. Always read the medicine package leaflet before use. The AI-generated information may contain inaccuracies.</p>
+
+<h2>9. AI Disclaimer</h2>
+
+<p><strong>Important:</strong> ObjectRelay uses AI-powered object recognition to identify items in photos. AI identification results may contain inaccuracies, miss certain objects, or misidentify items. The app is designed as a personal organization aid and should not be relied upon for insurance claims, legal documentation, or other critical purposes without independent verification.</p>
+
+<h2>10. Third-Party Services</h2>
+
 <p>Our apps use the following third-party services, each governed by their own privacy policies:</p>
 <ul>
-    <li><a href="https://policies.google.com/privacy" target="_blank">Google Firebase (Analytics, Crashlytics)</a></li>
-    <li><a href="https://ai.google.dev/terms" target="_blank">Google Gemini AI</a> (MediTrack only)</li>
-    <li><a href="https://adapty.io/privacy" target="_blank">Adapty (Subscription Management)</a></li>
-    <li><a href="https://www.apple.com/legal/privacy/" target="_blank">Apple App Store</a></li>
-    <li><a href="https://policies.google.com/privacy" target="_blank">Google Play Store</a></li>
+    <li><a href="https://policies.google.com/privacy">Google Firebase (Analytics, Crashlytics)</a></li>
+    <li><a href="https://ai.google.dev/terms">Google Gemini AI</a> (MediTrack and ObjectRelay)</li>
+    <li><a href="https://adapty.io/privacy">Adapty (Subscription Management)</a></li>
+    <li><a href="https://www.apple.com/legal/privacy/">Apple App Store</a></li>
+    <li><a href="https://policies.google.com/privacy">Google Play Store</a></li>
 </ul>
 
-<h2>10. Changes to This Policy</h2>
+<h2>11. Changes to This Policy</h2>
+
 <p>We may update this Privacy Policy from time to time. We will notify you of any changes by updating the "Last updated" date at the top of this page. Continued use of the apps after changes constitutes acceptance of the updated policy.</p>
 
-<h2>11. Contact Us</h2>
-<div class="contact">
-    <p>If you have questions about this Privacy Policy or wish to request data deletion, please contact us at:</p>
-    <p><strong>Email:</strong> <a href="mailto:tgsmobileapps@gmail.com">tgsmobileapps@gmail.com</a></p>
-    <p><strong>Developer:</strong> TGS Mobile Apps</p>
-</div>
+<h2>12. Contact Us</h2>
+
+<p>If you have questions about this Privacy Policy or wish to request data deletion, please contact us at:</p>
+
+<p><strong>Email:</strong> <a href="mailto:tgsmobileapps@gmail.com">tgsmobileapps@gmail.com</a></p>
+<p><strong>Developer:</strong> TGS Mobile Apps</p>
 
 </body>
 </html>
