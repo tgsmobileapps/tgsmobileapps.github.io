@@ -26,7 +26,7 @@
 
 <h1>Privacy Policy</h1>
 
-<p><strong>Last updated:</strong> April 20, 2026</p>
+<p><strong>Last updated:</strong> August 6, 2026</p>
 
 <p>TGS Mobile Apps ("we", "us", or "our") develops and publishes mobile applications. This Privacy Policy explains how we collect, use, and protect your information when you use any of our applications.</p>
 
@@ -35,7 +35,10 @@
     <li><strong>Authenticator App - MFA / 2FA</strong> (two-factor authentication manager)</li>
     <li><strong>MediTrack - AI Child Care Pal</strong> (child health and medication tracker)</li>
     <li><strong>ObjectRelay</strong> (AI-powered visual memory and inventory assistant)</li>
+    <li><strong>AI Plant Identifier - Botanic</strong> (plant identification, diagnosis and plant care assistant)</li>
 </ul>
+
+<p><strong>Please note:</strong> Botanic works differently from our other apps. It requires an account and stores your plant data in the cloud so it can sync across devices and send you care reminders. Sections below marked for Botanic describe this in detail.</p>
 
 <h2>1. Information We Collect</h2>
 
@@ -63,6 +66,18 @@
     <li><strong>Search Queries:</strong> All search queries are processed locally on your device against the local database. No search data is transmitted externally.</li>
 </ul>
 
+<h3>AI Plant Identifier - Botanic</h3>
+<ul>
+    <li><strong>Account Information:</strong> Botanic requires an account. You can sign in with Google, Apple, or an email address and password. Authentication is handled by <strong>Firebase Authentication</strong>. We store your user ID, email address and display name.</li>
+    <li><strong>Camera and Photos:</strong> Photos you take or select are stored <strong>locally on your device</strong>. To identify a plant or diagnose a problem, the photo is sent over an encrypted connection to our server function, which forwards it to Google's Gemini AI service. <strong>Photos are not stored on our servers</strong> and are not retained after the request completes.</li>
+    <li><strong>Plant Records:</strong> Plant names, region/category labels, watering intervals, reminder times, watering history, growth photos and your notes are stored locally on your device. A text copy of your plant records and analysis summaries is also stored in our <strong>Firebase Firestore</strong> database so it can be restored and synced.</li>
+    <li><strong>Scan Results:</strong> The text result of each scan is stored in Firestore together with your user ID, the scan mode and the AI model name. The scanned image itself is not stored.</li>
+    <li><strong>Location:</strong> If you grant location permission, the app reads your GPS position to show local weather and region-appropriate plant information. <strong>These coordinates are stored in your user record</strong> so that our server can generate weather-aware care advice. You can deny or revoke location permission at any time in your device settings; the app then falls back to a default region.</li>
+    <li><strong>Push Notifications:</strong> If you allow notifications, a Firebase Cloud Messaging token is stored in your user record so we can send plant care reminders. Watering reminders are also scheduled locally on your device.</li>
+    <li><strong>Usage Counters:</strong> We keep daily scan and chat counters in your user record to enforce free-tier limits and free trial eligibility.</li>
+    <li><strong>Expert Chat:</strong> Messages you send to the in-app plant expert chat are forwarded to Google Gemini for a response.</li>
+</ul>
+
 <h2>2. Analytics</h2>
 
 <p>Our applications use <strong>Firebase Analytics</strong> (by Google) to collect anonymous usage statistics, including:</p>
@@ -75,6 +90,8 @@
 
 <p>This data is anonymous and does not include personally identifiable information. It helps us improve app performance and user experience.</p>
 
+<p><strong>Botanic</strong> does not use Firebase Analytics. Instead it records which screens you open and how long you stay on them, and sends these events in batches to our own server function. These events are linked to your account so we can understand how the app is used and improve it.</p>
+
 <h2>3. In-App Purchases and Subscriptions</h2>
 
 <p>Our applications offer premium features through in-app subscriptions. Purchases are processed entirely through Apple App Store or Google Play Store. We use <strong>Adapty</strong> as our subscription management platform.</p>
@@ -85,9 +102,21 @@
 </ul>
 
 <h2>4. Data Storage and Security</h2>
+<p><strong>Authenticator App, MediTrack and ObjectRelay:</strong></p>
 <ul>
     <li>All personal data (child profiles, health records, 2FA secrets, inventory data, photos) is stored <strong>locally on your device</strong>.</li>
-    <li>We do not operate any servers that store your personal data.</li>
+    <li>We do not operate any servers that store this data.</li>
+</ul>
+
+<p><strong>AI Plant Identifier - Botanic:</strong></p>
+<ul>
+    <li>Photos always stay <strong>on your device</strong>; they are only transmitted for the duration of an AI request and are never stored on our servers.</li>
+    <li>Your account details, plant records, scan result texts, location coordinates, notification tokens and usage counters are stored in <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Functions, Cloud Messaging) under a project we control. Access is restricted by security rules so that a signed-in user can only read and write their own data.</li>
+    <li>AI requests go through our own server function rather than directly from the app, so that our API keys are never shipped inside the app.</li>
+</ul>
+
+<p><strong>All applications:</strong></p>
+<ul>
     <li>All network communications use HTTPS encryption.</li>
     <li>Photos sent to the AI service for analysis are transmitted via encrypted connections and are not retained after processing.</li>
     <li>We recommend enabling device passcode and biometric lock for additional security.</li>
@@ -97,9 +126,11 @@
 
 <p>We do not sell, trade, or share your personal information with third parties. Data is only transmitted in the following cases:</p>
 <ul>
-    <li><strong>Google Gemini AI:</strong> Photos are sent for AI analysis (MediTrack and ObjectRelay). Object names and descriptions generated by the AI are stored locally on your device only.</li>
+    <li><strong>Google Gemini AI:</strong> Photos and text prompts are sent for AI analysis (MediTrack, ObjectRelay and Botanic). For MediTrack and ObjectRelay the results are stored locally on your device only.</li>
+    <li><strong>Google Firebase:</strong> For Botanic, account details, plant records, scan result texts, location coordinates and notification tokens are stored in Firebase (Authentication, Firestore, Cloud Functions, Cloud Messaging).</li>
+    <li><strong>Open-Meteo:</strong> For Botanic, your coordinates are sent to the Open-Meteo weather service to retrieve local weather. No account information is included in that request.</li>
     <li><strong>Firebase Analytics:</strong> Anonymous usage statistics are sent to Google.</li>
-    <li><strong>Adapty:</strong> Anonymized subscription data for purchase management.</li>
+    <li><strong>Adapty:</strong> Anonymized subscription data for purchase management. For Botanic, your user ID is passed to Adapty so that a subscription can be matched to your account.</li>
 </ul>
 
 <h2>6. Data Deletion</h2>
@@ -109,15 +140,16 @@
     <li><strong>Authenticator App:</strong> Delete individual accounts or uninstall the app to remove all data.</li>
     <li><strong>MediTrack:</strong> Go to Settings (gear icon) → "Reset All Data" to permanently delete all profiles, medicines, temperature records, and dose history. Alternatively, uninstall the app.</li>
     <li><strong>ObjectRelay:</strong> Delete individual locations and their associated scans from within the app, or uninstall the app to remove all data including photos and inventory records.</li>
+    <li><strong>Botanic:</strong> You can delete individual plants and growth photos from within the app. To remove your account and the data stored for it, open the profile screen and choose <strong>Delete Account</strong>. Because Botanic stores data in the cloud, uninstalling the app alone does not delete your account — please use Delete Account, or contact us at the address below and we will delete it for you.</li>
 </ul>
 
-<p>Since all data is stored locally on your device, uninstalling the app permanently removes all associated data.</p>
+<p>For the Authenticator App, MediTrack and ObjectRelay all data is stored locally on your device, so uninstalling the app permanently removes all associated data.</p>
 
 <h2>7. Children's Privacy</h2>
 
 <p>MediTrack is designed for <strong>parents and caregivers</strong> to track their children's health information. The app is not intended to be used by children directly. We do not knowingly collect information from children under 13.</p>
 
-<p>The Authenticator App and ObjectRelay are not directed to children under 13.</p>
+<p>The Authenticator App, ObjectRelay and Botanic are not directed to children under 13.</p>
 
 <h2>8. Medical Disclaimer</h2>
 
@@ -127,12 +159,16 @@
 
 <p><strong>Important:</strong> ObjectRelay uses AI-powered object recognition to identify items in photos. AI identification results may contain inaccuracies, miss certain objects, or misidentify items. The app is designed as a personal organization aid and should not be relied upon for insurance claims, legal documentation, or other critical purposes without independent verification.</p>
 
+<p><strong>Important:</strong> Botanic uses AI to identify plants and to suggest care and treatment. Identification and diagnosis results may be inaccurate. The information is provided for general guidance only and is <strong>not professional agricultural, horticultural, veterinary or medical advice</strong>. Never eat, apply or otherwise use a plant based only on an identification made by the app — misidentifying a plant can be dangerous.</p>
+
 <h2>10. Third-Party Services</h2>
 
 <p>Our apps use the following third-party services, each governed by their own privacy policies:</p>
 <ul>
     <li><a href="https://policies.google.com/privacy">Google Firebase (Analytics, Crashlytics)</a></li>
-    <li><a href="https://ai.google.dev/terms">Google Gemini AI</a> (MediTrack and ObjectRelay)</li>
+    <li><a href="https://ai.google.dev/terms">Google Gemini AI</a> (MediTrack, ObjectRelay and Botanic)</li>
+    <li><a href="https://open-meteo.com/en/terms">Open-Meteo (Weather Data)</a> (Botanic)</li>
+    <li><a href="https://foundation.wikimedia.org/wiki/Policy:Privacy_policy">Wikimedia Commons</a> (Botanic, plant images)</li>
     <li><a href="https://adapty.io/privacy">Adapty (Subscription Management)</a></li>
     <li><a href="https://www.apple.com/legal/privacy/">Apple App Store</a></li>
     <li><a href="https://policies.google.com/privacy">Google Play Store</a></li>
