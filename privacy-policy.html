@@ -72,7 +72,7 @@
     <li><strong>Camera and Photos:</strong> Photos you take or select are stored <strong>locally on your device</strong>. To identify a plant or diagnose a problem, the photo is sent over an encrypted connection to our server function, which forwards it to Google's Gemini AI service. <strong>Photos are not stored on our servers</strong> and are not retained after the request completes.</li>
     <li><strong>Plant Records:</strong> Plant names, region/category labels, watering intervals, reminder times, watering history, growth photos and your notes are stored locally on your device. A text copy of your plant records and analysis summaries is also stored in our <strong>Firebase Firestore</strong> database so it can be restored and synced.</li>
     <li><strong>Scan Results:</strong> The text result of each scan is stored in Firestore together with your user ID, the scan mode and the AI model name. The scanned image itself is not stored.</li>
-    <li><strong>Location:</strong> If you grant location permission, the app reads your GPS position to show local weather and region-appropriate plant information. <strong>These coordinates are stored in your user record</strong> so that our server can generate weather-aware care advice. You can deny or revoke location permission at any time in your device settings; the app then falls back to a default region.</li>
+    <li><strong>Location:</strong> If you grant location permission, the app requests an <strong>approximate</strong> position (roughly town level, not your exact address) to show local weather and region-appropriate plant information. Before it is saved, the coordinate is rounded to about one kilometre, and this rounded value is stored in your user record so that our server can generate weather-aware care advice. We never store a precise location. You can deny or revoke location permission at any time in your device settings; the app then falls back to a default region.</li>
     <li><strong>Push Notifications:</strong> If you allow notifications, a Firebase Cloud Messaging token is stored in your user record so we can send plant care reminders. Watering reminders are also scheduled locally on your device.</li>
     <li><strong>Usage Counters:</strong> We keep daily scan and chat counters in your user record to enforce free-tier limits and free trial eligibility.</li>
     <li><strong>Expert Chat:</strong> Messages you send to the in-app plant expert chat are forwarded to Google Gemini for a response.</li>
@@ -111,7 +111,7 @@
 <p><strong>AI Plant Identifier - Botanic:</strong></p>
 <ul>
     <li>Photos always stay <strong>on your device</strong>; they are only transmitted for the duration of an AI request and are never stored on our servers.</li>
-    <li>Your account details, plant records, scan result texts, location coordinates, notification tokens and usage counters are stored in <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Functions, Cloud Messaging) under a project we control. Access is restricted by security rules so that a signed-in user can only read and write their own data.</li>
+    <li>Your account details, plant records, scan result texts, approximate location, notification tokens and usage counters are stored in <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Functions, Cloud Messaging) under a project we control. Access is restricted by security rules so that a signed-in user can only read and write their own data.</li>
     <li>AI requests go through our own server function rather than directly from the app, so that our API keys are never shipped inside the app.</li>
 </ul>
 
@@ -127,8 +127,8 @@
 <p>We do not sell, trade, or share your personal information with third parties. Data is only transmitted in the following cases:</p>
 <ul>
     <li><strong>Google Gemini AI:</strong> Photos and text prompts are sent for AI analysis (MediTrack, ObjectRelay and Botanic). For MediTrack and ObjectRelay the results are stored locally on your device only.</li>
-    <li><strong>Google Firebase:</strong> For Botanic, account details, plant records, scan result texts, location coordinates and notification tokens are stored in Firebase (Authentication, Firestore, Cloud Functions, Cloud Messaging).</li>
-    <li><strong>Open-Meteo:</strong> For Botanic, your coordinates are sent to the Open-Meteo weather service to retrieve local weather. No account information is included in that request.</li>
+    <li><strong>Google Firebase:</strong> For Botanic, account details, plant records, scan result texts, approximate location and notification tokens are stored in Firebase (Authentication, Firestore, Cloud Functions, Cloud Messaging).</li>
+    <li><strong>Open-Meteo:</strong> For Botanic, your approximate (rounded) coordinates are sent to the Open-Meteo weather service to retrieve local weather. No account information is included in that request.</li>
     <li><strong>Firebase Analytics:</strong> Anonymous usage statistics are sent to Google.</li>
     <li><strong>Adapty:</strong> Anonymized subscription data for purchase management. For Botanic, your user ID is passed to Adapty so that a subscription can be matched to your account.</li>
 </ul>
