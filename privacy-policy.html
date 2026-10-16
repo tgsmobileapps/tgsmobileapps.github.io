@@ -26,7 +26,7 @@
 
 <h1>Privacy Policy</h1>
 
-<p><strong>Last updated:</strong> August 6, 2026</p>
+<p><strong>Last updated:</strong> October 17, 2026</p>
 
 <p>TGS Mobile Apps ("we", "us", or "our") develops and publishes mobile applications. This Privacy Policy explains how we collect, use, and protect your information when you use any of our applications.</p>
 
@@ -36,6 +36,7 @@
     <li><strong>MediTrack - AI Child Care Pal</strong> (child health and medication tracker)</li>
     <li><strong>ObjectRelay</strong> (AI-powered visual memory and inventory assistant)</li>
     <li><strong>AI Plant Identifier - Botanic</strong> (plant identification, diagnosis and plant care assistant)</li>
+    <li><strong>GLP 1 Shot Tracker: ShotTime</strong> (also shown as GLP-1 Tracker; GLP-1 medication, dose, weight and nutrition tracker)</li>
 </ul>
 
 <p><strong>Please note:</strong> Botanic works differently from our other apps. It requires an account and stores your plant data in the cloud so it can sync across devices and send you care reminders. Sections below marked for Botanic describe this in detail.</p>
@@ -78,6 +79,20 @@
     <li><strong>Expert Chat:</strong> Messages you send to the in-app plant expert chat are forwarded to Google Gemini for a response.</li>
 </ul>
 
+<h3 id="glp-1-tracker">GLP 1 Shot Tracker: ShotTime</h3>
+<p>ShotTime does not have accounts. Everything you enter is stored <strong>locally on your device</strong> and is not uploaded to our servers, except for the two optional AI features described below.</p>
+<ul>
+    <li><strong>Medication and Doses:</strong> Your medication, dose, schedule, reminder times, dose history and injection sites are stored on your device.</li>
+    <li><strong>Profile:</strong> Your optional name (used only on the doctor report you create), sex, birth year, height, weight history, goal weight and preferred pace are stored on your device.</li>
+    <li><strong>Side Effects, Worries and Notes:</strong> Side effects, the worries and motivations you choose, and any free-text notes or journal entries are stored on your device.</li>
+    <li><strong>Progress Photos:</strong> If you add progress photos (with camera or photo library permission), the image files stay on your device and are never uploaded.</li>
+    <li><strong>Nutrition:</strong> Meals, protein, fiber and water you log are stored on your device.</li>
+    <li><strong>Apple Health / Health Connect (optional):</strong> If you allow it, the app reads and writes your weight, writes water, protein and fiber, reads these from other apps, and reads steps, active energy, height, sex and date of birth. Health data read from Apple Health or Health Connect stays on your device and is <strong>never used for advertising or analytics</strong>.</li>
+    <li><strong>AI Meal Analysis (premium, optional):</strong> After you agree in the app, the meal photo or description you submit is sent over an encrypted connection to our server function, which forwards it to Google Gemini to estimate nutrition. It is not stored on our servers and is not sent with your name or any identifier.</li>
+    <li><strong>AI Assistant (premium, optional):</strong> After you agree in the app, your messages and a summary of your logs (medication, doses, weight, side effects and today's nutrition) are sent through our server function to Google Gemini to answer your questions. <strong>This includes health information.</strong> Your name, notes and photos are not sent. Nothing is stored on our servers; the conversation is kept only on your device.</li>
+    <li><strong>Doctor Report:</strong> The PDF report is created on your device and only leaves it if you choose to share it. For Japanese, Korean and Chinese reports, a font file is downloaded from Google Fonts the first time; none of your data is sent with that request.</li>
+</ul>
+
 <h2>2. Analytics</h2>
 
 <p>Our applications use <strong>Firebase Analytics</strong> (by Google) to collect anonymous usage statistics, including:</p>
@@ -89,6 +104,8 @@
 </ul>
 
 <p>This data is anonymous and does not include personally identifiable information. It helps us improve app performance and user experience.</p>
+
+<p><strong>ShotTime</strong> does not use the advertising identifier (IDFA). Its analytics events describe how features are used (for example, that a meal or note was logged, or which paywall was shown). They never include your medication, doses, weight, height, birth year, side effects, worries, free-text notes, photos or any Apple Health / Health Connect data.</p>
 
 <p><strong>Botanic</strong> does not use Firebase Analytics. Instead it records which screens you open and how long you stay on them, and sends these events in batches to our own server function. These events are linked to your account so we can understand how the app is used and improve it.</p>
 
@@ -106,6 +123,13 @@
 <ul>
     <li>All personal data (child profiles, health records, 2FA secrets, inventory data, photos) is stored <strong>locally on your device</strong>.</li>
     <li>We do not operate any servers that store this data.</li>
+</ul>
+
+<p><strong>GLP 1 Shot Tracker: ShotTime:</strong></p>
+<ul>
+    <li>All of your records, photos and notes are stored <strong>locally on your device</strong>. We do not operate servers that store them.</li>
+    <li>AI requests go through our own server function protected by Firebase App Check, so that our API keys are never shipped inside the app. Requests are processed in real time and not stored.</li>
+    <li>Your data may be included in your device's own backup (for example iCloud or Google backup), which is controlled by you and your device provider.</li>
 </ul>
 
 <p><strong>AI Plant Identifier - Botanic:</strong></p>
@@ -126,7 +150,7 @@
 
 <p>We do not sell, trade, or share your personal information with third parties. Data is only transmitted in the following cases:</p>
 <ul>
-    <li><strong>Google Gemini AI:</strong> Photos and text prompts are sent for AI analysis (MediTrack, ObjectRelay and Botanic). For MediTrack and ObjectRelay the results are stored locally on your device only.</li>
+    <li><strong>Google Gemini AI:</strong> Photos and text prompts are sent for AI analysis (MediTrack, ObjectRelay, Botanic and ShotTime). For MediTrack, ObjectRelay and ShotTime the results are stored locally on your device only. In ShotTime, the AI assistant receives a summary of your health logs, only after you agree to it in the app.</li>
     <li><strong>Google Firebase:</strong> For Botanic, account details, plant records, scan result texts, approximate location and notification tokens are stored in Firebase (Authentication, Firestore, Cloud Functions, Cloud Messaging).</li>
     <li><strong>Open-Meteo:</strong> For Botanic, your approximate (rounded) coordinates are sent to the Open-Meteo weather service to retrieve local weather. No account information is included in that request.</li>
     <li><strong>Firebase Analytics:</strong> Anonymous usage statistics are sent to Google.</li>
@@ -140,20 +164,23 @@
     <li><strong>Authenticator App:</strong> Delete individual accounts or uninstall the app to remove all data.</li>
     <li><strong>MediTrack:</strong> Go to Settings (gear icon) → "Reset All Data" to permanently delete all profiles, medicines, temperature records, and dose history. Alternatively, uninstall the app.</li>
     <li><strong>ObjectRelay:</strong> Delete individual locations and their associated scans from within the app, or uninstall the app to remove all data including photos and inventory records.</li>
+    <li><strong>ShotTime:</strong> Go to Settings → "Delete all data" to permanently delete your medications, doses, weight, side effects, photos and profile from your device. Deleting a medication also deletes its dose history. Uninstalling the app removes all data. Data already written to Apple Health or Health Connect can be deleted there. Your subscription is not affected.</li>
     <li><strong>Botanic:</strong> You can delete individual plants and growth photos from within the app. To remove your account and the data stored for it, open the profile screen and choose <strong>Delete Account</strong>. Because Botanic stores data in the cloud, uninstalling the app alone does not delete your account — please use Delete Account, or contact us at the address below and we will delete it for you.</li>
 </ul>
 
-<p>For the Authenticator App, MediTrack and ObjectRelay all data is stored locally on your device, so uninstalling the app permanently removes all associated data.</p>
+<p>For the Authenticator App, MediTrack, ObjectRelay and ShotTime all data is stored locally on your device, so uninstalling the app permanently removes all associated data.</p>
 
 <h2>7. Children's Privacy</h2>
 
 <p>MediTrack is designed for <strong>parents and caregivers</strong> to track their children's health information. The app is not intended to be used by children directly. We do not knowingly collect information from children under 13.</p>
 
-<p>The Authenticator App, ObjectRelay and Botanic are not directed to children under 13.</p>
+<p>The Authenticator App, ObjectRelay and Botanic are not directed to children under 13. ShotTime is intended for adults and is not directed to children.</p>
 
 <h2>8. Medical Disclaimer</h2>
 
 <p><strong>Important:</strong> MediTrack provides general health information powered by AI for reference purposes only. It is <strong>not a substitute for professional medical advice, diagnosis, or treatment</strong>. Always consult your doctor or qualified healthcare provider before making any medical decisions. Always read the medicine package leaflet before use. The AI-generated information may contain inaccuracies.</p>
+
+<p><strong>Important:</strong> ShotTime is a personal tracking tool, <strong>not a medical device</strong>, and does not provide medical advice. The estimated medication level is based on average published values and is not your actual blood level. Do not change, skip or time your doses based on the app, and do not rely on reminders alone. Always follow your prescriber's instructions. The AI assistant and AI meal analysis may be inaccurate. Medication names mentioned in the app are trademarks of their respective owners; ShotTime is not affiliated with or endorsed by them.</p>
 
 <h2>9. AI Disclaimer</h2>
 
@@ -166,7 +193,8 @@
 <p>Our apps use the following third-party services, each governed by their own privacy policies:</p>
 <ul>
     <li><a href="https://policies.google.com/privacy">Google Firebase (Analytics, Crashlytics)</a></li>
-    <li><a href="https://ai.google.dev/terms">Google Gemini AI</a> (MediTrack, ObjectRelay and Botanic)</li>
+    <li><a href="https://ai.google.dev/terms">Google Gemini AI</a> (MediTrack, ObjectRelay, Botanic and ShotTime)</li>
+    <li><a href="https://www.apple.com/legal/privacy/">Apple Health</a> and <a href="https://policies.google.com/privacy">Health Connect</a> (ShotTime, optional)</li>
     <li><a href="https://open-meteo.com/en/terms">Open-Meteo (Weather Data)</a> (Botanic)</li>
     <li><a href="https://foundation.wikimedia.org/wiki/Policy:Privacy_policy">Wikimedia Commons</a> (Botanic, plant images)</li>
     <li><a href="https://adapty.io/privacy">Adapty (Subscription Management)</a></li>
