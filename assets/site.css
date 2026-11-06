@@ -30,7 +30,12 @@ h2 { font-size: 22px; margin: 40px 0 16px; }
 .card h3 { margin: 0 0 6px; font-size: 17px; line-height: 1.3; }
 .card p { margin: 0 0 12px; color: var(--muted); font-size: 15px; }
 .links { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
-.store { background: var(--accent-soft); color: var(--accent); text-decoration: none; font-weight: 600; font-size: 14px; padding: 6px 12px; border-radius: 999px; }
+.links { align-items: center; }
+.badge { display: inline-flex; line-height: 0; }
+.badge img { height: 40px; width: auto; }
+/* PNG'de rozetin çevresinde 41/250 oranında boşluk var: görünen kısım 40px olsun. */
+.badge-play img { height: 59.5px; margin: -9.75px; }
+.legal { font-size: 12px; }
 .soon { font-size: 14px; color: var(--muted); border: 1px dashed var(--line); padding: 5px 12px; border-radius: 999px; }
 .small { font-size: 13px; color: var(--muted); }
 .card .small { margin: 0; }

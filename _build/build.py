@@ -111,6 +111,7 @@ def foot(prefix):
     return f"""<footer><div class="wrap">
   <p>© 2026 TGS Mobile Apps · <a href="mailto:{EMAIL}">{EMAIL}</a></p>
   <p><a href="{prefix}privacy-policy.html">Privacy Policy</a> · <a href="{prefix}support.html">Support</a></p>
+  <p class="legal">Apple and the Apple logo are trademarks of Apple Inc., registered in the U.S. and other countries. App Store is a service mark of Apple Inc. Google Play and the Google Play logo are trademarks of Google LLC.</p>
 </div></footer>
 </body>
 </html>
@@ -122,9 +123,10 @@ def badges(a):
         return '<span class="soon">Coming soon</span>'
     out = []
     if a["ios"]:
-        out.append(f'<a class="store" href="{a["ios"]}">App Store</a>')
+        out.append(f'<a class="badge" href="{a["ios"]}"><img src="assets/badges/app-store.svg" alt="Download on the App Store" width="120" height="40"></a>')
     if a["play"]:
-        out.append(f'<a class="store" href="{a["play"]}">Google Play</a>')
+        # Google'ın PNG'si kendi boşluğunu içeriyor; CSS görünen yüksekliği 40px'e eşitliyor.
+        out.append(f'<a class="badge badge-play" href="{a["play"]}"><img src="assets/badges/google-play.png" alt="Get it on Google Play" width="155" height="60"></a>')
     return "".join(out)
 
 
