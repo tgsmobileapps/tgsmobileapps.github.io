@@ -4,6 +4,7 @@
 
 Jekyll ignores folders starting with "_", so this script is not published.
 """
+import hashlib
 from html import escape
 from pathlib import Path
 
@@ -86,7 +87,14 @@ APPS = [
     ),
 ]
 
-CSS_LINK = '<link rel="stylesheet" href="{p}assets/site.css">'
+# Sürüm etiketi: CSS değişince tarayıcı eski kopyayı önbellekten kullanmasın.
+CSS_VER = hashlib.sha1((Path(__file__).parent.parent / "assets/site.css").read_bytes()).hexdigest()[:8]
+CSS_LINK = '<link rel="stylesheet" href="{p}assets/site.css?v=' + CSS_VER + '">'
+
+
+ICON_LINKS = """<link rel="icon" type="image/png" sizes="32x32" href="{p}assets/brand/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="{p}assets/brand/favicon-16.png">
+<link rel="apple-touch-icon" href="{p}assets/brand/apple-touch-icon.png">"""
 
 
 def head(title, desc, prefix):
@@ -98,10 +106,11 @@ def head(title, desc, prefix):
 <title>{escape(title)}</title>
 <meta name="description" content="{escape(desc)}">
 {CSS_LINK.format(p=prefix)}
+{ICON_LINKS.format(p=prefix)}
 </head>
 <body>
 <header class="top"><div class="wrap">
-  <a class="brand" href="{prefix}index.html">TGS Mobile Apps</a>
+  <a class="brand" href="{prefix}index.html"><img src="{prefix}assets/brand/apple-touch-icon.png" alt="" width="28" height="28">TGS Mobile Apps</a>
   <nav><a href="{prefix}index.html#apps">Apps</a><a href="{prefix}support.html">Support</a><a href="{prefix}privacy-policy.html">Privacy</a></nav>
 </div></header>
 """
