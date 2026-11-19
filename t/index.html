@@ -29,6 +29,7 @@
   body { min-height: 100svh; display: flex; justify-content: center; }
   main { width: 100%; max-width: 460px; padding: max(16px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom)); display: flex; flex-direction: column; gap: 16px; }
   .ust { text-align: center; color: var(--soluk); letter-spacing: 6px; font-size: 12px; margin-top: 8px; }
+  .ust.ad { font-family: Caveat, cursive; font-weight: 700; font-size: 32px; letter-spacing: 0; color: var(--yazi); margin-top: 0; line-height: 1.1; overflow-wrap: anywhere; }
   .lcd { background: linear-gradient(var(--lcd-zemin), #241809); border-radius: 8px; padding: 10px 14px; font-family: Menlo, ui-monospace, monospace; color: var(--lcd); text-shadow: 0 0 6px rgba(255,176,74,.55); box-shadow: inset 0 0 0 5px rgba(0,0,0,.45); }
   .lcd .satir { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
   .lcd .kucuk { font-size: 11px; letter-spacing: 1.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -70,7 +71,7 @@
 </head>
 <body>
 <main>
-  <div class="ust">POCKET TAPE</div>
+  <div class="ust" id="ust">POCKET TAPE</div>
 
   <section id="yukleniyor" class="durum-mesaj"><h1>Rewinding…</h1><p>Getting your tape ready.</p></section>
   <section id="yok" class="durum-mesaj" hidden><h1>This tape isn't here</h1><p>The link may be wrong, or the sender took the tape back.</p></section>
@@ -103,8 +104,8 @@
 
     <div class="parcalar" id="parcalar"></div>
 
-    <a class="cta" id="cta" href="https://tgsmobileapps.store/">Record a tape back</a>
-    <div class="cta-alt">Get Pocket Tape for iPhone and send one back.</div>
+    <a class="cta" id="cta" href="get.html">Record a tape back</a>
+    <div class="cta-alt">Download Pocket Tape and send one back.</div>
 
     <div class="rapor" id="rapor">
       <strong>Report this tape</strong>
@@ -451,7 +452,11 @@
     if (mektup.durum !== "aktif") throw new Error("aktif değil");
     bant = mektup.bant || 300;
     $("lcd-baslik").textContent = (mektup.etiket || "A TAPE FOR YOU").toUpperCase();
-    if (mektup.etiket) document.title = `${mektup.etiket} · Pocket Tape`;
+    if (mektup.ad) {
+      const baslik = `${mektup.ad}'s Taped Message`;
+      $("ust").textContent = baslik; $("ust").classList.add("ad");
+      document.title = `${baslik} · Pocket Tape`;
+    } else if (mektup.etiket) document.title = `${mektup.etiket} · Pocket Tape`;
     $("taraf-B").disabled = !mektup.taraflar?.B;
     $("taraf-A").disabled = !mektup.taraflar?.A;
     if (!mektup.taraflar?.A) { taraf = "B"; $("taraf-A").setAttribute("aria-pressed", "false"); $("taraf-B").setAttribute("aria-pressed", "true"); }
