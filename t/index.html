@@ -99,6 +99,7 @@
     <div class="taraflar">
       <button id="taraf-A" aria-pressed="true">SIDE A</button>
       <button id="taraf-B" aria-pressed="false">SIDE B</button>
+      <button id="hiz" aria-pressed="false" aria-label="Playback speed">1×</button>
     </div>
 
     <div class="tuslar">
@@ -169,6 +170,8 @@
   let ctx = null, cikis = null, cizirti = null, cizirtiKazanc = null;
   const sesler = {};          // taraf → { ileri: AudioBuffer, geri: AudioBuffer, sure }
   let kaynak = null, kaynakYon = 0;
+  let calmaHizi = 1;
+  function hizliDurdur() { Object.values(sesler).forEach((x) => { if (!x.el.paused) x.el.pause(); }); }
 
   function sesiHazirla() {
     if (ctx) return;
@@ -220,6 +223,9 @@
     const yanit = await fetch(`https://firebasestorage.googleapis.com/v0/b/${KOVA}/o/${yol}?alt=media`);
     if (!yanit.ok) throw new Error("ses " + yanit.status);
     const ham = await yanit.arrayBuffer();
+    // Hızlı çalma için aynı ses, perdesi korunarak (HTML audio).
+    const el = new Audio(URL.createObjectURL(new Blob([ham.slice(0)], { type: "audio/mp4" })));
+    el.preload = "auto"; el.preservesPitch = true; el.mozPreservesPitch = true; el.webkitPreservesPitch = true;
     sesiHazirla();
     const ileri = await new Promise((ok, hata) => ctx.decodeAudioData(ham, ok, hata));
     // Geri sarma sesi için ters kopya
@@ -228,7 +234,7 @@
       const a = ileri.getChannelData(k), b = geri.getChannelData(k);
       for (let i = 0, n = a.length; i < n; i++) b[i] = a[n - 1 - i];
     }
-    sesler[t] = { ileri, geri, sure: ileri.duration };
+    sesler[t] = { ileri, geri, sure: ileri.duration, el };
     return sesler[t];
   }
 
@@ -250,7 +256,17 @@
       motorKazanc.gain.setTargetAtTime(sarma ? Math.min(0.35, 0.05 * Math.abs(hiz)) : 0, t0, 0.03);
       if (sarma) motor.playbackRate.setTargetAtTime(0.7 + 0.08 * v, t0, 0.05);
     }
-    if (!hareket || !kayitli) { kaynagiDurdur(); return; }
+    if (!hareket || !kayitli) { kaynagiDurdur(); hizliDurdur(); return; }
+    // 1,5× / 2× normal çalma: perdesi korunan HTML audio çalar.
+    if (mod === "cal" && calmaHizi !== 1 && s.el) {
+      kaynagiDurdur();
+      const el = s.el;
+      el.playbackRate = calmaHizi;
+      if (Math.abs(el.currentTime - konum) > 0.3) el.currentTime = konum;
+      if (el.paused) el.play().catch(() => {});
+      return;
+    }
+    hizliDurdur();
     const yon = hiz > 0 ? 1 : -1;
     const oran = Math.min(Math.max(Math.abs(hiz), 0.05), 12);
     if (kaynak && kaynakYon === yon) {
@@ -345,7 +361,7 @@
   let onceki = performance.now();
   function tik(simdi) {
     const dt = Math.min((simdi - onceki) / 1000, 0.05); onceki = simdi;
-    if (mod === "cal") hiz = 1;
+    if (mod === "cal") hiz = calmaHizi;
     else if (mod === "ileri") hiz = 8;
     else if (mod === "geri") hiz = -8;
     else if (mod === "kay") { hiz *= Math.exp(-dt * 2.2); if (Math.abs(hiz) < 0.08) mod = "dur"; }
@@ -377,6 +393,8 @@
     if (ctx.state === "suspended") await ctx.resume();
     try { await tarafSesi(taraf); } catch (e) { console.warn(e); }
     mod = mod === yeni ? "dur" : yeni;
+    // iOS Safari HTML audio'yu yalnız dokunuşla başlatır.
+    if (mod === "cal" && calmaHizi !== 1) { const el = sesler[taraf]?.el; if (el) { el.currentTime = konum; el.playbackRate = calmaHizi; el.play().catch(() => {}); } }
     efektCal("tus", 0.8);
     if (navigator.vibrate) navigator.vibrate(8);
     tuslariGoster();
@@ -399,6 +417,13 @@
     parcaListesi(); tuslariGoster();
     try { await tarafSesi(t); } catch (e) { console.warn(e); }
   }
+  $("hiz").onclick = () => {
+    calmaHizi = calmaHizi === 1 ? 1.5 : calmaHizi === 1.5 ? 2 : 1;
+    $("hiz").textContent = `${calmaHizi}×`;
+    $("hiz").setAttribute("aria-pressed", String(calmaHizi !== 1));
+    if (mod === "cal" && calmaHizi !== 1) { const el = sesler[taraf]?.el; if (el) { el.currentTime = konum; el.playbackRate = calmaHizi; el.play().catch(() => {}); } }
+    efektCal("tus", 0.8);
+  };
   $("taraf-A").onclick = () => tarafSec("A");
   $("taraf-B").onclick = () => tarafSec("B");
 
