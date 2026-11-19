@@ -185,6 +185,33 @@
     cizirti = ctx.createBufferSource(); cizirti.buffer = g; cizirti.loop = true;
     cizirtiKazanc = ctx.createGain(); cizirtiKazanc.gain.value = 0;
     cizirti.connect(cizirtiKazanc).connect(suzgec); cizirti.start();
+    efektleriYukle();
+  }
+
+  // Uygulamadaki mekanik sesler: sarma motoru, bant cızırtısı, tuş, bant sonu.
+  const efekt = {};
+  let motor = null, motorKazanc = null, kayitCizirti = null;
+  async function efektleriYukle() {
+    await Promise.all(["motor", "cizirti", "tus", "klak"].map(async (a) => {
+      try {
+        const r = await fetch(`ses/${a}.wav`);
+        efekt[a] = await new Promise(async (ok, hata) => ctx.decodeAudioData(await r.arrayBuffer(), ok, hata));
+      } catch (e) { console.warn("efekt", a, e); }
+    }));
+    const dongu = (buf) => {
+      const k = ctx.createBufferSource(); k.buffer = buf; k.loop = true;
+      const g = ctx.createGain(); g.gain.value = 0;
+      k.connect(g).connect(ctx.destination); k.start();
+      return [k, g];
+    };
+    if (efekt.motor) [motor, motorKazanc] = dongu(efekt.motor);
+    if (efekt.cizirti) { cizirtiKazanc.gain.value = 0; [, kayitCizirti] = dongu(efekt.cizirti); }
+  }
+  function efektCal(a, ses = 1) {
+    if (!ctx || !efekt[a]) return;
+    const k = ctx.createBufferSource(); k.buffer = efekt[a];
+    const g = ctx.createGain(); g.gain.value = ses;
+    k.connect(g).connect(ctx.destination); k.start();
   }
 
   async function tarafSesi(t) {
@@ -216,7 +243,13 @@
     const s = sesler[taraf];
     const hareket = Math.abs(hiz) > 0.06;
     const kayitli = s && konum < s.sure - 0.02;
-    cizirtiKazanc.gain.setTargetAtTime(hareket ? 0.012 + 0.006 * Math.min(Math.abs(hiz), 8) : 0, ctx.currentTime, 0.03);
+    const v = Math.min(Math.abs(hiz), 8), sarma = mod !== "cal" && hareket, t0 = ctx.currentTime;
+    if (kayitCizirti) kayitCizirti.gain.setTargetAtTime(hareket ? 0.05 + 0.02 * v : 0, t0, 0.03);
+    else cizirtiKazanc.gain.setTargetAtTime(hareket ? 0.012 + 0.006 * v : 0, t0, 0.03);
+    if (motor) {
+      motorKazanc.gain.setTargetAtTime(sarma ? Math.min(0.35, 0.05 * Math.abs(hiz)) : 0, t0, 0.03);
+      if (sarma) motor.playbackRate.setTargetAtTime(0.7 + 0.08 * v, t0, 0.05);
+    }
     if (!hareket || !kayitli) { kaynagiDurdur(); return; }
     const yon = hiz > 0 ? 1 : -1;
     const oran = Math.min(Math.max(Math.abs(hiz), 0.05), 12);
@@ -328,7 +361,7 @@
     ciz();
     requestAnimationFrame(tik);
   }
-  function bitti() { mod = "dur"; hiz = 0; tuslariGoster(); }
+  function bitti() { if (mod !== "dur") efektCal("klak"); mod = "dur"; hiz = 0; tuslariGoster(); }
 
   function lcd() {
     const durum = { dur: konum >= bant - 0.05 ? "END" : "READY", cal: "PLAY", ileri: "FF", geri: "REW", sar: "SPIN", kay: "SPIN" }[mod];
@@ -344,6 +377,7 @@
     if (ctx.state === "suspended") await ctx.resume();
     try { await tarafSesi(taraf); } catch (e) { console.warn(e); }
     mod = mod === yeni ? "dur" : yeni;
+    efektCal("tus", 0.8);
     if (navigator.vibrate) navigator.vibrate(8);
     tuslariGoster();
   }
@@ -353,7 +387,7 @@
   $("tus-cal").onclick = () => tus("cal");
   $("tus-ileri").onclick = () => tus("ileri");
   $("tus-geri").onclick = () => tus("geri");
-  $("tus-dur").onclick = () => { mod = "dur"; tuslariGoster(); };
+  $("tus-dur").onclick = () => { if (mod !== "dur") efektCal("tus", 0.8); mod = "dur"; tuslariGoster(); };
 
   async function tarafSec(t) {
     if (!mektup?.taraflar?.[t] || t === taraf) return;
@@ -459,6 +493,7 @@
     if (mektup.durum !== "aktif") throw new Error("aktif değil");
     bant = mektup.bant || 300;
     $("lcd-baslik").textContent = (mektup.etiket || "A TAPE FOR YOU").toUpperCase();
+    if (mektup.ad?.startsWith("projects/")) mektup.ad = ""; // eski uygulama sürümünün hatası
     if (mektup.ad) {
       const baslik = `${mektup.ad}'s Taped Message`;
       $("ust").textContent = baslik; $("ust").classList.add("ad");
