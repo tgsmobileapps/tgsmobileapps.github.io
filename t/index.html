@@ -69,6 +69,10 @@
   .rapor .dugmeler { display: flex; gap: 8px; justify-content: flex-end; }
   .rapor button { padding: 9px 14px; border-radius: 8px; border: 1px solid #4a4741; background: transparent; color: var(--yazi); font: inherit; }
   .rapor button.gonder { background: #e5574d; border-color: #e5574d; color: #fff; }
+  .kilit { text-align: center; background: var(--govde); border-radius: 12px; padding: 18px 14px; }
+  .kilit h2 { font-family: Caveat, cursive; font-size: 30px; margin: 0 0 4px; color: var(--yazi); }
+  .kilit p { margin: 0; color: var(--soluk); font-size: 14px; }
+  .kilit .geri-sayim { font: 26px Menlo, ui-monospace, monospace; color: var(--lcd); text-shadow: 0 0 6px rgba(255,176,74,.55); margin: 12px 0 2px; letter-spacing: 1px; }
   .durum-mesaj { text-align: center; padding: 60px 16px; color: var(--soluk); }
   .durum-mesaj h1 { font-family: Caveat, cursive; color: var(--yazi); font-size: 36px; margin: 0 0 8px; }
   [hidden] { display: none !important; }
@@ -93,6 +97,11 @@
 
     <div class="kaset-kutu" id="kaset-kutu">
       <canvas id="kaset" aria-label="Cassette. Spin a reel with your finger to wind the tape."></canvas>
+    </div>
+    <div class="kilit" id="kilit" hidden>
+      <h2>🔒 Sealed until <span id="kilit-gun"></span></h2>
+      <div class="geri-sayim" id="geri-sayim">--</div>
+      <p>This tape is a time capsule. Come back when the countdown ends.</p>
     </div>
     <div class="ipucu" id="ipucu">Press play, or spin a reel with your finger</div>
 
@@ -381,7 +390,7 @@
 
   function lcd() {
     const durum = { dur: konum >= bant - 0.05 ? "END" : "READY", cal: "PLAY", ileri: "FF", geri: "REW", sar: "SPIN", kay: "SPIN" }[mod];
-    $("lcd-durum").textContent = `● ${taraf} SIDE   ${durum}`;
+    $("lcd-durum").textContent = kilitli ? "● SEALED" : `● ${taraf} SIDE   ${durum}`;
     $("lcd-sayac").textContent = mmss(konum);
     const p = parcalar(); const no = p.findIndex((x) => konum >= x.bas - 0.05 && konum < x.son);
     $("lcd-parca").textContent = p.length ? `${no < 0 ? "--" : String(no + 1).padStart(2, "0")}/${String(p.length).padStart(2, "0")}` : "";
@@ -389,6 +398,7 @@
 
   // ------------------------------------------------------------ tuşlar
   async function tus(yeni) {
+    if (kilitli) return;
     sesiHazirla();
     if (ctx.state === "suspended") await ctx.resume();
     try { await tarafSesi(taraf); } catch (e) { console.warn(e); }
@@ -431,6 +441,7 @@
   let merkez = null, sonAci = 0, solMakara = true, ornekler = [], sonZaman = 0, uctaVurdu = false;
   const kutu = $("kaset-kutu");
   kutu.addEventListener("pointerdown", async (e) => {
+    if (kilitli) return;
     sesiHazirla(); if (ctx.state === "suspended") ctx.resume();
     tarafSesi(taraf).catch(() => {});
     const r = tuval.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
@@ -517,6 +528,23 @@
     if ("arrayValue" in v) return (v.arrayValue.values || []).map(deger);
     return null;
   };
+  // Zaman kapsülü: açılış anına kadar kaset kilitli, geri sayım; vakit gelince sayfa yenilenir.
+  let kilitli = false;
+  function kilitle(acilis) {
+    kilitli = true;
+    $("kilit").hidden = false;
+    ["ipucu", "parcalar"].forEach((x) => { $(x).hidden = true; });
+    document.querySelector(".taraflar").hidden = true; document.querySelector(".tuslar").hidden = true;
+    $("kilit-gun").textContent = new Intl.DateTimeFormat(undefined, { month: "long", day: "numeric" }).format(acilis);
+    const say = () => {
+      const k = acilis - new Date();
+      if (k <= 0) { location.reload(); return; }
+      const g = Math.floor(k / 864e5), sa = Math.floor(k / 36e5) % 24, dk = Math.floor(k / 6e4) % 60, sn = Math.floor(k / 1e3) % 60;
+      const iki = (n) => String(n).padStart(2, "0");
+      $("geri-sayim").textContent = `${g > 0 ? g + "d " : ""}${iki(sa)}:${iki(dk)}:${iki(sn)}`;
+    };
+    say(); setInterval(say, 1000);
+  }
   async function yukle() {
     if (id.length < 20) throw new Error("kimlik");
     const yanit = await fetch(`${BELGE}/mektuplar/${id}?key=${ANAHTAR}`);
@@ -536,6 +564,7 @@
     $("taraf-A").disabled = !mektup.taraflar?.A;
     if (!mektup.taraflar?.A) { taraf = "B"; $("taraf-A").setAttribute("aria-pressed", "false"); $("taraf-B").setAttribute("aria-pressed", "true"); }
     $("yukleniyor").hidden = true; $("oynatici").hidden = false;
+    if (mektup.acilis instanceof Date && mektup.acilis > new Date()) kilitle(mektup.acilis);
     boyutla(); parcaListesi();
     if (document.fonts) document.fonts.load("700 20px Caveat").catch(() => {});
     requestAnimationFrame(tik);
