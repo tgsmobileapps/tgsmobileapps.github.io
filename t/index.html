@@ -6,6 +6,8 @@
 <title>A tape for you · Pocket Tape</title>
 <meta name="description" content="Someone recorded you a tape. Press play, or spin the reels with your finger.">
 <meta name="robots" content="noindex">
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 <meta property="og:title" content="Someone recorded you a tape 📼">
 <meta property="og:description" content="Press play, or spin the reels with your finger.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,6 +30,8 @@
   html, body { margin: 0; background: var(--zemin); color: var(--yazi); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
   body { min-height: 100svh; display: flex; justify-content: center; }
   main { width: 100%; max-width: 460px; padding: max(16px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom)); display: flex; flex-direction: column; gap: 16px; }
+  .marka { display: flex; justify-content: center; margin-top: 4px; }
+  .marka img { width: 56px; height: 56px; border-radius: 13px; box-shadow: 0 4px 14px rgba(0,0,0,.45); }
   .ust { text-align: center; color: var(--soluk); letter-spacing: 6px; font-size: 12px; margin-top: 8px; }
   .ust.ad { font-family: Caveat, cursive; font-weight: 700; font-size: 32px; letter-spacing: 0; color: var(--yazi); margin-top: 0; line-height: 1.1; overflow-wrap: anywhere; }
   .lcd { background: linear-gradient(var(--lcd-zemin), #241809); border-radius: 8px; padding: 10px 14px; font-family: Menlo, ui-monospace, monospace; color: var(--lcd); text-shadow: 0 0 6px rgba(255,176,74,.55); box-shadow: inset 0 0 0 5px rgba(0,0,0,.45); }
@@ -71,6 +75,7 @@
 </head>
 <body>
 <main>
+  <div class="marka"><img src="img/pocket-tape-128.png" alt="Pocket Tape" width="56" height="56"></div>
   <div class="ust" id="ust">POCKET TAPE</div>
 
   <section id="yukleniyor" class="durum-mesaj"><h1>Rewinding…</h1><p>Getting your tape ready.</p></section>
@@ -465,6 +470,17 @@
     if (document.fonts) document.fonts.load("700 20px Caveat").catch(() => {});
     requestAnimationFrame(tik);
   }
+  // Ertelenmiş bağlantı: kaset bağlantısı panoya kopyalanır; uygulama kurulup
+  // ilk açıldığında oradan okuyup kaseti Inbox'a koyar.
+  $("cta").addEventListener("click", async (e) => {
+    if (!id || !navigator.clipboard?.writeText) return;
+    e.preventDefault();
+    const hedef = $("cta").href;
+    try {
+      await Promise.race([navigator.clipboard.writeText(`https://tgsmobileapps.store/t/#${id}`), new Promise((r) => setTimeout(r, 600))]);
+    } catch (_) {}
+    location.href = hedef;
+  });
   window.addEventListener("resize", () => mektup && boyutla());
   yukle().catch((e) => { console.warn(e); $("yukleniyor").hidden = true; $("yok").hidden = false; });
 })();
