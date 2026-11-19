@@ -352,8 +352,8 @@
     else if (mod === "sar") hiz *= Math.exp(-dt * 10);
     else hiz = 0;
     if (mod !== "sar") konum += hiz * dt;
-    if (konum >= bant) { konum = bant; if (hiz > 0 && mod !== "sar") bitti(); }
-    if (konum <= 0) { konum = 0; if (hiz < 0 && mod !== "sar") bitti(); }
+    if (konum >= bant) { konum = bant; if (hiz > 0) { if (mod !== "sar") bitti(); hiz = 0; } }
+    if (konum <= 0) { konum = 0; if (hiz < 0) { if (mod !== "sar") bitti(); hiz = 0; } }
     const ds = hiz * dt * PIKSEL;
     solAci += ds / yaricap(bant - konum); sagAci += ds / yaricap(konum);
     sesiGuncelle(dt);
@@ -403,7 +403,7 @@
   $("taraf-B").onclick = () => tarafSec("B");
 
   // ------------------------------------------------------------ parmakla sarma
-  let merkez = null, sonAci = 0, solMakara = true, ornekler = [], sonZaman = 0;
+  let merkez = null, sonAci = 0, solMakara = true, ornekler = [], sonZaman = 0, uctaVurdu = false;
   const kutu = $("kaset-kutu");
   kutu.addEventListener("pointerdown", async (e) => {
     sesiHazirla(); if (ctx.state === "suspended") ctx.resume();
@@ -424,7 +424,15 @@
     const ry = yaricap(solMakara ? bant - konum : konum);
     const dk = da * ry / PIKSEL * (olcek / olcek);
     const dt = Math.min(Math.max((e.timeStamp - sonZaman) / 1000, 1 / 240), 0.1); sonZaman = e.timeStamp;
-    konum = Math.min(Math.max(konum + dk, 0), bant);
+    const yeni = konum + dk;
+    if (yeni <= 0 || yeni >= bant) {
+      // Bant ucu: makara daha dönmez, bir kez "klak".
+      konum = yeni <= 0 ? 0 : bant; hiz = 0; ornekler = [];
+      if (!uctaVurdu) { uctaVurdu = true; efektCal("klak"); if (navigator.vibrate) navigator.vibrate(15); }
+      return;
+    }
+    uctaVurdu = false;
+    konum = yeni;
     ornekler.push(dk / dt); if (ornekler.length > 5) ornekler.shift();
     hiz = ornekler.reduce((a, b) => a + b, 0) / ornekler.length;
   });
