@@ -59,6 +59,7 @@
   .parca .ne small { display: block; color: var(--soluk); font-size: 12px; }
   .parca .sure { font: 13px Menlo, ui-monospace, monospace; color: var(--soluk); }
   .cta { display: block; text-align: center; text-decoration: none; background: var(--vurgu); color: #1c1b19; font-weight: 700; font-size: 17px; padding: 16px; border-radius: 12px; }
+  .cta.ac { background: transparent; color: var(--vurgu); border: 1.5px solid var(--vurgu); }
   .cta-alt { text-align: center; color: var(--soluk); font-size: 13px; margin-top: -8px; }
   .alt { display: flex; justify-content: center; gap: 18px; font-size: 12px; }
   .alt a, .alt button { color: var(--soluk); background: none; border: 0; font: inherit; text-decoration: underline; padding: 4px; cursor: pointer; }
@@ -109,6 +110,7 @@
 
     <div class="parcalar" id="parcalar"></div>
 
+    <a class="cta ac" id="ac" href="#" hidden>Open in Pocket Tape</a>
     <a class="cta" id="cta" href="get.html">Record a tape back</a>
     <div class="cta-alt">Download Pocket Tape and send one back.</div>
 
@@ -481,6 +483,24 @@
     } catch (_) {}
     location.href = hedef;
   });
+  // Uygulama içi tarayıcılar (Gmail vb.) Universal Link'i uygulamaya vermez;
+  // telefonda uygulamayı kendi adresiyle açan düğme. Android'de uygulama yoksa
+  // mağazaya düşer; iOS'ta yoksa altındaki "Record a tape back" duruyor.
+  const ua = navigator.userAgent;
+  const android = /android/i.test(ua);
+  const ios = /iphone|ipad|ipod/i.test(ua) || (/macintosh/i.test(ua) && navigator.maxTouchPoints > 1);
+  if (id && (android || ios)) {
+    $("ac").hidden = false;
+    $("ac").addEventListener("click", async (e) => {
+      e.preventDefault();
+      try {
+        await Promise.race([navigator.clipboard?.writeText(`https://tgsmobileapps.store/t/#${id}`), new Promise((r) => setTimeout(r, 400))]);
+      } catch (_) {}
+      location.href = android
+        ? `intent://t/${id}#Intent;scheme=pockettape;package=com.tgsmobileapps.pockettape;S.browser_fallback_url=${encodeURIComponent("https://tgsmobileapps.store/t/get.html#android")};end`
+        : `pockettape://t/${id}`;
+    });
+  }
   window.addEventListener("resize", () => mektup && boyutla());
   yukle().catch((e) => { console.warn(e); $("yukleniyor").hidden = true; $("yok").hidden = false; });
 })();
