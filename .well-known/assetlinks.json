@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.tgsmobileapps.pockettape",
+      "sha256_cert_fingerprints": [
+        "46:10:FD:0F:FA:78:8E:49:B3:7F:E4:59:6B:5B:7D:8F:C0:DE:30:A8:D8:21:97:08:ED:DD:E3:DB:FB:BC:8C:E0"
+      ]
+    }
+  }
+]

@@ -1,0 +1,13 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["59MP2PG9L3.com.tgsmobileapps.pockettape"],
+        "components": [
+          { "/": "/t/get.html", "exclude": true },
+          { "/": "/t/", "#": "?*" }
+        ]
+      }
+    ]
+  }
+}
