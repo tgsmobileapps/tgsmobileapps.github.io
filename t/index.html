@@ -84,6 +84,15 @@
   <div class="ust" id="ust">POCKET TAPE</div>
 
   <section id="yukleniyor" class="durum-mesaj"><h1>Rewinding…</h1><p>Getting your tape ready.</p></section>
+  <section id="davet" class="durum-mesaj" hidden>
+    <h1 id="davet-baslik">You're invited to a mixtape</h1>
+    <p id="davet-metin">Add your own track in Pocket Tape. Up to 5 minutes.</p>
+    <div style="display:flex;flex-direction:column;gap:12px;margin-top:22px">
+      <a class="cta ac" id="davet-ac" href="#">Add my track in Pocket Tape</a>
+      <a class="cta" id="davet-al" href="get.html">Get Pocket Tape</a>
+    </div>
+  </section>
+  <section id="davet-kapali" class="durum-mesaj" hidden><h1>This mixtape is closed</h1><p>The invite has ended, or the tape was already sent.</p></section>
   <section id="yok" class="durum-mesaj" hidden><h1>This tape isn't here</h1><p>The link may be wrong, or the sender took the tape back.</p></section>
 
   <section id="oynatici" hidden style="display:flex;flex-direction:column;gap:16px">
@@ -613,7 +622,36 @@
     });
   }
   window.addEventListener("resize", () => mektup && boyutla());
-  yukle().catch((e) => { console.warn(e); $("yukleniyor").hidden = true; $("yok").hidden = false; });
+  // Ortak kaset daveti: #mix-<kimlik>. Parça yalnız uygulamadan eklenir.
+  async function davet(kid) {
+    $("yukleniyor").hidden = true;
+    const y = await fetch(`${BELGE}/karmalar/${kid}?key=${ANAHTAR}`);
+    if (!y.ok) { $("davet-kapali").hidden = false; return; }
+    const k = Object.fromEntries(Object.entries((await y.json()).fields).map(([a, v]) => [a, deger(v)]));
+    if (k.durum !== "acik" || !(k.bitis > new Date())) { $("davet-kapali").hidden = false; return; }
+    if (k.ad) { $("davet-baslik").textContent = `${k.ad} is making a mixtape`; document.title = `${k.ad}'s mixtape · Pocket Tape`; }
+    const gun = new Intl.DateTimeFormat(undefined, { month: "long", day: "numeric" }).format(k.bitis);
+    $("davet-metin").textContent = `Add your own track to ${k.etiket ? "“" + k.etiket + "”" : "the tape"} in Pocket Tape. Up to 5 minutes, open until ${gun}.`;
+    $("davet").hidden = false;
+    const link = `https://tgsmobileapps.store/t/#mix-${kid}`;
+    const kopyala = async () => { try { await Promise.race([navigator.clipboard?.writeText(link), new Promise((r) => setTimeout(r, 500))]); } catch (_) {} };
+    const ua = navigator.userAgent;
+    const android = /android/i.test(ua);
+    $("davet-ac").addEventListener("click", async (e) => {
+      e.preventDefault();
+      await kopyala();
+      location.href = android
+        ? `intent://m/${kid}#Intent;scheme=pockettape;package=com.tgsmobileapps.pockettape;S.browser_fallback_url=${encodeURIComponent("https://tgsmobileapps.store/t/get.html#android")};end`
+        : `pockettape://m/${kid}`;
+    });
+    $("davet-al").addEventListener("click", async (e) => { e.preventDefault(); await kopyala(); location.href = "get.html"; });
+  }
+  const hamHash = decodeURIComponent((location.hash || "").replace(/^#/, ""));
+  if (hamHash.startsWith("mix-")) {
+    davet(hamHash.slice(4).replace(/[^A-Za-z0-9]/g, "")).catch((e) => { console.warn(e); $("yukleniyor").hidden = true; $("davet-kapali").hidden = false; });
+  } else {
+    yukle().catch((e) => { console.warn(e); $("yukleniyor").hidden = true; $("yok").hidden = false; });
+  }
 })();
 </script>
 </body>
