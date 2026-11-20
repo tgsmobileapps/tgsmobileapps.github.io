@@ -29,7 +29,7 @@
 
 <h1>Privacy Policy</h1>
 
-<p><strong>Last updated:</strong> November 17, 2026</p>
+<p><strong>Last updated:</strong> November 20, 2026</p>
 
 <p>TGS Mobile Apps ("we", "us", or "our") develops and publishes mobile applications. This Privacy Policy explains how we collect, use, and protect your information when you use any of our applications.</p>
 
@@ -96,6 +96,16 @@
     <li><strong>Doctor Report:</strong> The PDF report is created on your device and only leaves it if you choose to share it. For Japanese, Korean and Chinese reports, a font file is downloaded from Google Fonts the first time; none of your data is sent with that request.</li>
 </ul>
 
+<h3 id="pocket-tape">Pocket Tape: Voice Cassettes</h3>
+<p>Pocket Tape does not have accounts or sign-in. Your tapes are stored <strong>on your device</strong> unless you choose to send one.</p>
+<ul>
+    <li><strong>Recordings:</strong> With your microphone permission, the app records audio onto tapes. Recordings, tape titles and styles are stored on your device.</li>
+    <li><strong>Voice letters (optional):</strong> When you send a tape, its audio, title, tape style, track timestamps and the optional "from" name you type are uploaded to our Google Firebase project so the people you share the link with can listen. Anyone who has the link can listen. You can take a tape back at any time from the Sent tab; this deletes its audio from our servers and the link stops working. You can also choose a date before which the tape stays locked.</li>
+    <li><strong>Mixtapes (optional):</strong> If you add a track to someone's mixtape, your recording and the name you type are uploaded and can be heard by the person who invited you, who puts it on their tape.</li>
+    <li><strong>Anonymous identifier:</strong> To protect sent tapes, the app creates an anonymous Firebase identifier on your device. It is not linked to your name, email or phone number.</li>
+    <li><strong>Clipboard:</strong> On first launch the app checks the clipboard once for a Pocket Tape link (so a tape a friend sent you can open after you install). On iPhone it only reads the clipboard if it contains a web address. Nothing else from the clipboard is used or stored.</li>
+    <li><strong>Reports:</strong> If you report a tape from its listening page, the text you write is stored so we can review it.</li>
+</ul>
 <h2>2. Analytics</h2>
 
 <p>Our applications use <strong>Firebase Analytics</strong> (by Google) to collect anonymous usage statistics, including:</p>
@@ -142,6 +152,12 @@
     <li>AI requests go through our own server function rather than directly from the app, so that our API keys are never shipped inside the app.</li>
 </ul>
 
+<p><strong>Pocket Tape: Voice Cassettes:</strong></p>
+<ul>
+    <li>Tapes you do not send stay on your device. Sent tapes (audio and the details listed above) are stored in <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage) under a project we control until you take them back. Security rules make sure only the sender can change or remove a tape, and locked tapes cannot be downloaded before their opening date.</li>
+    <li>Pocket Tape does not use Firebase Analytics or any advertising identifier.</li>
+</ul>
+
 <p><strong>All applications:</strong></p>
 <ul>
     <li>All network communications use HTTPS encryption.</li>
@@ -156,6 +172,7 @@
     <li><strong>Google Gemini AI:</strong> Photos and text prompts are sent for AI analysis (MediTrack, ObjectRelay, Botanic and ShotTime). For MediTrack, ObjectRelay and ShotTime the results are stored locally on your device only. In ShotTime, the AI assistant receives a summary of your health logs, only after you agree to it in the app.</li>
     <li><strong>Google Firebase:</strong> For Botanic, account details, plant records, scan result texts, approximate location and notification tokens are stored in Firebase (Authentication, Firestore, Cloud Functions, Cloud Messaging).</li>
     <li><strong>Open-Meteo:</strong> For Botanic, your approximate (rounded) coordinates are sent to the Open-Meteo weather service to retrieve local weather. No account information is included in that request.</li>
+    <li><strong>Google Firebase:</strong> For Pocket Tape, tapes you choose to send (and mixtape tracks) are stored in Firebase so the people with the link can listen.</li>
     <li><strong>Firebase Analytics:</strong> Anonymous usage statistics are sent to Google.</li>
     <li><strong>Adapty:</strong> Anonymized subscription data for purchase management. For Botanic, your user ID is passed to Adapty so that a subscription can be matched to your account.</li>
 </ul>
@@ -169,6 +186,7 @@
     <li><strong>ObjectRelay:</strong> Delete individual locations and their associated scans from within the app, or uninstall the app to remove all data including photos and inventory records.</li>
     <li><strong>ShotTime:</strong> Go to Settings → "Delete all data" to permanently delete your medications, doses, weight, side effects, photos and profile from your device. Deleting a medication also deletes its dose history. Uninstalling the app removes all data. Data already written to Apple Health or Health Connect can be deleted there. Your subscription is not affected.</li>
     <li><strong>Botanic:</strong> You can delete individual plants and growth photos from within the app. To remove your account and the data stored for it, open the profile screen and choose <strong>Delete Account</strong>. Because Botanic stores data in the cloud, uninstalling the app alone does not delete your account — please use Delete Account, or contact us at the address below and we will delete it for you.</li>
+    <li><strong>Pocket Tape:</strong> Delete tapes on your device by swiping them left. Take back any tape you sent from the Sent tab to delete it from our servers. Uninstalling the app removes your local tapes but does not take back tapes you already sent — take them back first, or contact us at the address below.</li>
 </ul>
 
 <p>For the Authenticator App, MediTrack, ObjectRelay and ShotTime all data is stored locally on your device, so uninstalling the app permanently removes all associated data.</p>
@@ -200,6 +218,7 @@
     <li><a href="https://www.apple.com/legal/privacy/">Apple Health</a> and <a href="https://policies.google.com/privacy">Health Connect</a> (ShotTime, optional)</li>
     <li><a href="https://open-meteo.com/en/terms">Open-Meteo (Weather Data)</a> (Botanic)</li>
     <li><a href="https://foundation.wikimedia.org/wiki/Policy:Privacy_policy">Wikimedia Commons</a> (Botanic, plant images)</li>
+    <li><a href="https://firebase.google.com/support/privacy">Google Firebase (Authentication, Firestore, Cloud Storage)</a> (Botanic, Pocket Tape)</li>
     <li><a href="https://adapty.io/privacy">Adapty (Subscription Management)</a></li>
     <li><a href="https://www.apple.com/legal/privacy/">Apple App Store</a></li>
     <li><a href="https://policies.google.com/privacy">Google Play Store</a></li>
